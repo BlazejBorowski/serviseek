@@ -1,0 +1,205 @@
+services:
+    db:
+        image: mysql:8.4
+        container_name: serviseek_db
+        restart: unless-stopped
+        tty: true
+        environment:
+            - MYSQL_DATABASE=${DB_DATABASE}
+            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+        volumes:
+            - db-data:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        networks:
+            - laravel
+        healthcheck:
+            test:
+                [
+                    "CMD-SHELL",
+                    "mysqladmin ping -h localhost -u root -p${DB_PASSWORD} || exit 1",
+                ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    phpmyadmin:
+        image: ghcr.io/blazejborowski/phpmyadmin-blueberry:5.2
+        container_name: serviseek_phpmyadmin
+        restart: unless-stopped
+        environment:
+            - PMA_HOST=db
+            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+        ports:
+            - "8081:80"
+        depends_on:
+            - db
+        networks:
+            - laravel
+
+    redis:
+        image: redis:7.4
+        container_name: serviseek_redis
+        restart: unless-stopped
+        environment:
+            - REDIS_PASSWORD=${REDIS_PASSWORD}
+        volumes:
+            - redis-data:/data
+        command: redis-server --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+        ports:
+            - "6379:6379"
+        networks:
+            - laravel
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    mailpit:
+        image: axllent/mailpit:v1.20
+        container_name: serviseek_mailpit
+        restart: unless-stopped
+        volumes:
+            - mailpit-data:/data
+        ports:
+            - "8025:8025" # Web interface for viewing emails
+            - "1025:1025" # SMTP server
+        networks:
+            - laravel
+        environment:
+            MP_MAX_MESSAGES: 5000
+            MP_DATABASE: /data/mailpit.db
+            MP_SMTP_AUTH_ACCEPT_ANY: 1
+            MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+    localstack:
+        image: localstack/localstack:3.8
+        container_name: serviseek_localstack
+        environment:
+            - SERVICES=s3
+        ports:
+            - "4566:4566"
+        volumes:
+            - "./docker/localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"
+            - localstack-data:/var/lib/localstack
+        networks:
+            - laravel
+
+    setup:
+        image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_STACK_VERSION}
+        environment:
+            - ELASTIC_PASSWORD=${ELASTICSEARCH_PASSWORD}
+            - KIBANA_PASSWORD=${KIBANA_PASSWORD}
+        container_name: setup
+        command:
+            - bash
+            - -c
+            - |
+                echo "Waiting for Elasticsearch availability";
+                until curl -s http://elasticsearch:9200 | grep -q "missing authentication credentials"; do sleep 30; done;
+                echo "Setting kibana_system password";
+                until curl -s -X POST -u "elastic:${ELASTICSEARCH_PASSWORD}" -H "Content-Type: application/json" http://elasticsearch:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
+                echo "All done!";
+        networks:
+            - laravel
+
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_STACK_VERSION}
+        container_name: serviseek_elasticsearch
+        ports:
+            - 9200:9200
+        environment:
+            - discovery.type=single-node
+            - cluster.name=${ELASTIC_CLUSTER_NAME}
+            - bootstrap.memory_lock=true
+            - ES_JAVA_OPTS=-Xms1g -Xmx1g
+            - ELASTIC_PASSWORD=${ELASTICSEARCH_PASSWORD}
+            - xpack.security.http.ssl.enabled=false
+        networks:
+            - laravel
+
+    kibana:
+        image: docker.elastic.co/kibana/kibana:${ELASTIC_STACK_VERSION}
+        container_name: serviseek_kibana
+        ports:
+            - 5601:5601
+        environment:
+            - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+            - ELASTICSEARCH_USERNAME=kibana_system
+            - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+            - TELEMETRY_ENABLED=false
+        networks:
+            - laravel
+
+    logstash:
+        image: docker.elastic.co/logstash/logstash:${ELASTIC_STACK_VERSION}
+        container_name: serviseek_logstash
+        command:
+            - /bin/bash
+            - -c
+            - |
+                cp /usr/share/logstash/pipeline/logstash.yml /usr/share/logstash/config/logstash.yml
+                echo "Waiting for Elasticsearch availability";
+                until curl -s http://elasticsearch:9200 | grep -q "missing authentication credentials"; do sleep 1; done;
+                echo "Starting logstash";
+                /usr/share/logstash/bin/logstash -f /usr/share/logstash/pipeline/logstash.conf
+        ports:
+            - 5044:5044
+        environment:
+            - xpack.monitoring.enabled=false
+            - ELASTIC_USER=elastic
+            - ELASTIC_PASSWORD=${ELASTICSEARCH_PASSWORD}
+            - ELASTIC_HOSTS=http://elasticsearch:9200
+        volumes:
+            - ./docker/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+        networks:
+            - laravel
+
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: serviseek_app
+        depends_on:
+            db:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+            mailpit:
+                condition: service_started
+            localstack:
+                condition: service_started
+            logstash:
+                condition: service_started
+        volumes:
+            - app-public-data:/var/www/app/public
+            - app-storage-data:/var/www/app/storage
+        networks:
+            - laravel
+
+    nginx:
+        image: nginx:1.27
+        container_name: serviseek_nginx
+        depends_on:
+            - app
+        ports:
+            - "8080:80"
+        volumes:
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - .:/var/www/app
+        networks:
+            - laravel
+
+volumes:
+    db-data:
+    redis-data:
+    mailpit-data:
+    localstack-data:
+    app-public-data:
+    app-storage-data:
+    es-data:
+
+networks:
+    laravel:
+        driver: bridge

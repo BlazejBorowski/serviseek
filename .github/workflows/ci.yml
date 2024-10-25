@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Cache Composer dependencies to speed up installation
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            composer-
+
+      # Cache Node.js modules
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            node-modules
+
+      # Set up PHP
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+          coverage: none
+
+      # Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      # Install Composer dependencies
+      - name: Run composer install
+        run: composer install -n --prefer-dist
+
+      # Install Node.js dependencies
+      - name: Install Node.js dependencies
+        run: npm install
+
+      # Build frontend assets
+      - name: Build frontend
+        run: npm run build
+
+      # Prepare the Laravel application
+      - name: Prepare Laravel Application
+        run: |
+          cp .env.ci .env
+          php artisan key:generate
+
+      # Run Laravel Pint
+      - name: Run Laravel Pint
+        run: php vendor/bin/pint --test
+
+      # Run PHPStan (Larastan)
+      - name: Run Larastan (PHPStan)
+        run: php vendor/bin/phpstan analyse --memory-limit=2G
+
+      # Run backend tests
+      - name: Run backend tests
+        run: php artisan test --parallel
+
+      # Run frontend tests
+      - name: Run frontend tests
+        run: npm run test
+
+      # Run Cypress end-to-end tests
+      - name: Run Cypress tests
+        run: npx cypress run
