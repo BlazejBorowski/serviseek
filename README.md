@@ -16,7 +16,7 @@ ServiSeek is a web platform designed to connect clients with local service provi
 ## Main Technologies used
 
 -   **Laravel**: v11
--   **Inertia**: v1 (will be changed to v2.0)
+-   **Inertia**: v1 (will be changed to v2)
 -   **React**: v18
 
 ## Additional Technologies used
