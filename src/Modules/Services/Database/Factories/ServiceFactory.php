@@ -22,7 +22,7 @@ class ServiceFactory extends Factory
     {
         return [
             'name' => $this->faker->company,
-            'description' => $this->faker->paragraph
+            'description' => $this->faker->paragraph,
         ];
     }
 }

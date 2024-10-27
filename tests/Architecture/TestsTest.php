@@ -16,7 +16,7 @@ class TestsTest extends TestCase
 
     private array $moduleTestDirectories = [
         __DIR__.'/../../src/Modules/*/Tests/Unit',
-        __DIR__.'/../../src/Modules/*/Tests/Feature'
+        __DIR__.'/../../src/Modules/*/Tests/Feature',
     ];
 
     private array $otherDirectories = [

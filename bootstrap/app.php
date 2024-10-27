@@ -31,9 +31,9 @@ return Application::configure(basePath: dirname(__DIR__))
             ], $e->getCode() ?: 500);
         });
 
-        $exceptions->render(function(NotImplementedException $e) {
+        $exceptions->render(function (NotImplementedException $e) {
             return response()->view('errors.not_implemented', [
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 501);
         });
     })->create();

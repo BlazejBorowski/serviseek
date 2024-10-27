@@ -13,7 +13,7 @@ class StrictTest extends TestCase
 
         $this->directories = [
             __DIR__.'/../../app',
-            __DIR__.'/../../src/Modules'
+            __DIR__.'/../../src/Modules',
         ];
     }
 

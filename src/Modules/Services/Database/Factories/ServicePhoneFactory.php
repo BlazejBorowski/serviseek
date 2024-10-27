@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Services\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\\Modules\Services\Models\ServicePhone>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Modules\Services\Models\ServicePhone>
  */
 class ServicePhoneFactory extends Factory
 {

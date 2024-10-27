@@ -6,15 +6,16 @@ namespace Core\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Auth;
-use Inertia\Inertia;
-use Modules\Services\Models\Service;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+use Inertia\Response;
+use Modules\Services\Models\Service;
 
 class CoreController extends Controller
 {
-    public function dashboard(Request $request)
+    public function dashboard(Request $request): Response
     {
         $services = Service::paginate(10);
 

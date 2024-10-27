@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Services\Actions\AddRandomServices;
 
 use Modules\Services\Actions\AddRandomServices;

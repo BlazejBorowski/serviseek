@@ -24,11 +24,18 @@ class ServiceSeeder extends Seeder
                 $service->emails()->saveMany(\Modules\Services\Models\ServiceEmail::factory(2)->make());
                 $service->phones()->saveMany(\Modules\Services\Models\ServicePhone::factory(2)->make());
 
+                /** @var int[] $selectedUsers */
                 $selectedUsers = $users->random(3)->pluck('id')->toArray();
 
+                /** @var array<int, array<string, string>> $roles */
                 $roles = array_fill(0, count($selectedUsers), ['role' => 'Manager']);
 
-                $service->users()->sync(array_combine($selectedUsers, $roles));
+                /** @var array<int, array<string, string>> $rolesToAttach */
+                $rolesToAttach = array_combine($selectedUsers, $roles);
+
+                if ($rolesToAttach) {
+                    $service->users()->sync($rolesToAttach);
+                }
             });
     }
 }

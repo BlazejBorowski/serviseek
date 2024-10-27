@@ -14,7 +14,7 @@ class ServiceControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_create_throws_not_implemented_exception()
+    public function test_create_throws_not_implemented_exception(): void
     {
         $user = User::factory()->create([
             'name' => 'Test User',
@@ -25,7 +25,7 @@ class ServiceControllerTest extends TestCase
         Exceptions::fake();
 
         $response = $this->actingAs($user)
-                        ->get('/services/create');
+            ->get('/services/create');
 
         Exceptions::assertReported(NotImplementedException::class);
 

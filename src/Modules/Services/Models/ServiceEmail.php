@@ -6,14 +6,24 @@ namespace Modules\Services\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Services\Database\Factories\ServiceEmailFactory;
 
+/**
+ * @property int $id
+ * @property string $email
+ * @property string $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ */
 class ServiceEmail extends Model
 {
+    /** @use HasFactory<\Modules\Services\Database\Factories\ServiceEmailFactory> */
     use HasFactory;
 
-    protected static function newFactory()
+    protected static function newFactory(): ServiceEmailFactory
     {
-        return \Modules\Services\Database\Factories\ServiceEmailFactory::new();
+        return ServiceEmailFactory::new();
     }
 
     protected $fillable = [
@@ -21,7 +31,10 @@ class ServiceEmail extends Model
         'description',
     ];
 
-    public function service()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\Services\Models\Service, $this>
+     */
+    public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
     }

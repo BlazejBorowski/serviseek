@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Modules\Services\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Modules\Services\Actions\AddRandomServices\AddRandomServiceBasic;
 use Modules\Services\Actions\AddRandomServices;
+use Modules\Services\Actions\AddRandomServices\AddRandomServiceBasic;
 
 class ServiceServiceProvider extends ServiceProvider
 {

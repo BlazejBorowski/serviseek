@@ -18,7 +18,6 @@ class LaravelTest extends TestCase
     {
         $directory = __DIR__.'/../../app/Traits';
 
-
         $files = glob($directory.'/*.php');
 
         if (empty($files)) {

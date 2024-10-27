@@ -6,6 +6,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Modules\Services\Models\Service;
@@ -49,7 +50,10 @@ class User extends Authenticatable
         ];
     }
 
-    public function services()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<\Modules\Services\Models\Service, $this>
+     */
+    public function services(): BelongsToMany
     {
         return $this->belongsToMany(Service::class)
             ->withPivot('role')
