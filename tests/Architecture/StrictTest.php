@@ -7,6 +7,16 @@ use Tests\TestCase;
 
 class StrictTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->directories = [
+            __DIR__.'/../../app',
+            __DIR__.'/../../src/Modules'
+        ];
+    }
+
     public function testProhibitedFunctionsAreNotUsed(): void
     {
         $prohibitedFunctions = [
@@ -85,19 +95,20 @@ class StrictTest extends TestCase
             'trap',
         ];
 
-        $directory = __DIR__.'/../../app';
-        $files = DirectoryHelper::getPhpFilesFromDirectory(realpath($directory));
+        foreach ($this->directories as $directory) {
+            $files = DirectoryHelper::getPhpFilesFromDirectory(realpath($directory));
 
-        foreach ($files as $file) {
-            $content = file_get_contents($file);
+            foreach ($files as $file) {
+                $content = file_get_contents($file);
 
-            foreach ($prohibitedFunctions as $function) {
-                $pattern = '/\b'.preg_quote($function).'\s*\(/';
+                foreach ($prohibitedFunctions as $function) {
+                    $pattern = '/\b'.preg_quote($function).'\s*\(/';
 
-                $this->assertFalse(
-                    preg_match($pattern, $content) === 1,
-                    "The function {$function} should not be used in file {$file}."
-                );
+                    $this->assertFalse(
+                        preg_match($pattern, $content) === 1,
+                        "The function {$function} should not be used in file {$file}."
+                    );
+                }
             }
         }
     }
@@ -128,35 +139,37 @@ class StrictTest extends TestCase
             'assert',
         ];
 
-        $directory = __DIR__.'/../../app';
-        $files = DirectoryHelper::getPhpFilesFromDirectory(realpath($directory));
+        foreach ($this->directories as $directory) {
+            $files = DirectoryHelper::getPhpFilesFromDirectory(realpath($directory));
 
-        foreach ($files as $file) {
-            $content = file_get_contents($file);
+            foreach ($files as $file) {
+                $content = file_get_contents($file);
 
-            foreach ($notSecureFunctions as $function) {
-                $pattern = '/\b'.preg_quote($function).'\s*\(/';
+                foreach ($notSecureFunctions as $function) {
+                    $pattern = '/\b'.preg_quote($function).'\s*\(/';
 
-                $this->assertFalse(
-                    preg_match($pattern, $content) === 1,
-                    "The insecure function {$function} should not be used in file {$file}."
-                );
+                    $this->assertFalse(
+                        preg_match($pattern, $content) === 1,
+                        "The insecure function {$function} should not be used in file {$file}."
+                    );
+                }
             }
         }
     }
 
     public function testStrictTypesAreUsed(): void
     {
-        $directory = __DIR__.'/../../app';
-        $files = DirectoryHelper::getPhpFilesFromDirectory(realpath($directory));
+        foreach ($this->directories as $directory) {
+            $files = DirectoryHelper::getPhpFilesFromDirectory(realpath($directory));
 
-        foreach ($files as $file) {
-            $content = file_get_contents($file);
+            foreach ($files as $file) {
+                $content = file_get_contents($file);
 
-            $this->assertTrue(
-                strpos($content, 'declare(strict_types=1);') !== false,
-                "The file {$file} does not declare strict_types=1."
-            );
+                $this->assertTrue(
+                    strpos($content, 'declare(strict_types=1);') !== false,
+                    "The file {$file} does not declare strict_types=1."
+                );
+            }
         }
     }
 
@@ -167,19 +180,20 @@ class StrictTest extends TestCase
             'usleep',
         ];
 
-        $directory = __DIR__.'/../../app';
-        $files = DirectoryHelper::getPhpFilesFromDirectory(realpath($directory));
+        foreach ($this->directories as $directory) {
+            $files = DirectoryHelper::getPhpFilesFromDirectory(realpath($directory));
 
-        foreach ($files as $file) {
-            $content = file_get_contents($file);
+            foreach ($files as $file) {
+                $content = file_get_contents($file);
 
-            foreach ($prohibitedFunctions as $function) {
-                $pattern = '/\b'.preg_quote($function).'\s*\(/';
+                foreach ($prohibitedFunctions as $function) {
+                    $pattern = '/\b'.preg_quote($function).'\s*\(/';
 
-                $this->assertFalse(
-                    preg_match($pattern, $content) === 1,
-                    "The function {$function} should not be used in file {$file}."
-                );
+                    $this->assertFalse(
+                        preg_match($pattern, $content) === 1,
+                        "The function {$function} should not be used in file {$file}."
+                    );
+                }
             }
         }
     }

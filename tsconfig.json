@@ -21,6 +21,7 @@
         "resources/js/**/*.tsx",
         "resources/js/**/*.d.ts",
         "src/Modules/**/*.ts",
-        "src/Modules/**/*.tsx"
+        "src/Modules/**/*.tsx",
+        "eslint.config.mjs"
     ]
 }

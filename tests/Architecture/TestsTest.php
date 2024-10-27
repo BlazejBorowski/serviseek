@@ -14,6 +14,11 @@ class TestsTest extends TestCase
         __DIR__.'/../../tests/Architecture',
     ];
 
+    private array $moduleTestDirectories = [
+        __DIR__.'/../../src/Modules/*/Tests/Unit',
+        __DIR__.'/../../src/Modules/*/Tests/Feature'
+    ];
+
     private array $otherDirectories = [
         __DIR__.'/../../tests/Helpers',
     ];
@@ -21,7 +26,7 @@ class TestsTest extends TestCase
     public function testAllTestClassesExtendTestCase(): void
     {
         $classNames = [];
-        foreach ($this->testDirectories as $directory) {
+        foreach (array_merge($this->testDirectories, $this->moduleTestDirectories) as $directory) {
             $classNames = array_merge($classNames, DirectoryHelper::getClassNamesFromDirectory($directory));
         }
 

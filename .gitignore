@@ -24,5 +24,4 @@ yarn-error.log
 /coverage
 database/database.sqlite
 infection.json5
-phpstan.neon
 *storybook.log

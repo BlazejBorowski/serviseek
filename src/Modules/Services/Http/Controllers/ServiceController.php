@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Services\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Inertia\Inertia;
+use Modules\Services\Http\Requests\StoreServiceRequest;
+use Modules\Services\Http\Requests\UpdateServiceRequest;
 use Modules\Services\Models\Service;
-use Modules\Services\Requests\StoreServiceRequest;
-use Modules\Services\Requests\UpdateServiceRequest;
 
 class ServiceController extends Controller
 {
@@ -14,7 +17,9 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Services/List', [
+            'services' => Service::paginate(20),
+        ]);
     }
 
     /**

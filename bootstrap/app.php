@@ -4,10 +4,11 @@ use App\Exceptions\InternalException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Nette\NotImplementedException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
+        web: __DIR__.'/../routes/web/core.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
@@ -28,5 +29,11 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->view('errors.custom-exception', [
                 'message' => $e->getMessage(),
             ], $e->getCode() ?: 500);
+        });
+
+        $exceptions->render(function(NotImplementedException $e) {
+            return response()->view('errors.not_implemented', [
+                'message' => $e->getMessage()
+            ], 501);
         });
     })->create();

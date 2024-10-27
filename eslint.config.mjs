@@ -1,5 +1,3 @@
-// @ts-check
-
 import url from "node:url";
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";

@@ -46,5 +46,20 @@ ServiSeek is open-sourced under the MIT license, which permits free use, modific
 
 ## Start help
 
-Kibana:
-elasticsearch-create-enrollment-token -s kibana
+There are three ways to setup project:
+
+1. Local
+    1. Copy .env.local to .env
+    2. composer install
+    3. npm install
+    4. php artisan key:generate
+    5. php artisan migrate --seed
+    6. Run composer run dev
+2. Local with Services
+    1. Copy .env.local-with-services.local to .env
+    2. ...
+    3. Run composer run dev
+3. Docker with Services
+    1. Run docker-compose --env-file .env.docker up -d
+    2. ...
+    3. Setup Kibana ... elasticsearch-create-enrollment-token -s kibana

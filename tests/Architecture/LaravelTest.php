@@ -11,11 +11,14 @@ use Tests\Helpers\DirectoryHelper;
 use Tests\TestCase;
 use Throwable;
 
+// TODO: Update tests for modules
 class LaravelTest extends TestCase
 {
     public function testAllClassesInTraitsDirectoryAreTraits(): void
     {
         $directory = __DIR__.'/../../app/Traits';
+
+
         $files = glob($directory.'/*.php');
 
         if (empty($files)) {

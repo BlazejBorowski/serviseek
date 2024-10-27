@@ -63,14 +63,15 @@
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run dev\" --names=server,queue,logs,vite"
         ],
-        "phpstan": "php vendor/bin/phpstan analyse",
+        "phpstan": "php vendor/bin/phpstan analyse --memory-limit=2G",
         "pint": "php vendor/bin/pint",
         "pint-test": "php vendor/bin/pint --test",
         "phpunit": "php vendor/bin/phpunit --testdox",
         "coverage": "php vendor/bin/phpunit --coverage-text --coverage-html=coverage/",
         "infection": "infection --threads=4",
         "infection-cov": "infection --threads=4 --coverage=coverage/",
-        "docker": "docker-compose --env-file .env.docker up -d"
+        "docker": "docker-compose --env-file .env.docker up -d",
+        "dev:seed": "php artisan migrate:fresh --seed --seeder=Database\\Seeders\\DevSeeder"
     },
     "extra": {
         "laravel": {
