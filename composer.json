@@ -71,7 +71,8 @@
         "infection": "infection --threads=4",
         "infection-cov": "infection --threads=4 --coverage=coverage/",
         "docker": "docker-compose --env-file .env.docker up -d",
-        "dev:seed": "php artisan migrate:fresh --seed --seeder=Database\\Seeders\\DevSeeder"
+        "dev:seed": "php artisan migrate:fresh --seed --seeder=Database\\Seeders\\DevSeeder",
+        "inertia:ssr": "php artisan inertia:start-ssr"
     },
     "extra": {
         "laravel": {
