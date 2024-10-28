@@ -43,9 +43,11 @@ class ServiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Service $service): never
+    public function show(Service $service): Response
     {
-        throw new NotImplementedException;
+        return Inertia::render('Services/Show', [
+            'service' => $service,
+        ]);
     }
 
     /**

@@ -18,6 +18,5 @@ class ServiceServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
-        $this->loadFactoriesFrom(__DIR__.'/../Database/Factories');
     }
 }

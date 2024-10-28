@@ -1,10 +1,12 @@
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+// import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+// import GuestLayout from "@/Layouts/GuestLayout";
+import AppLayout from "@/Layouts/AppLayout";
 import { Head } from "@inertiajs/react";
 import { ServicesListProps } from "./types";
 
 export default function List({ services }: ServicesListProps) {
     return (
-        <AuthenticatedLayout
+        <AppLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                     Services
@@ -12,7 +14,6 @@ export default function List({ services }: ServicesListProps) {
             }
         >
             <Head title="Services" />
-
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
@@ -27,6 +28,6 @@ export default function List({ services }: ServicesListProps) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AppLayout>
     );
 }
