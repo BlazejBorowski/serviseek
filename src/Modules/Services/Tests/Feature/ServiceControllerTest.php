@@ -49,7 +49,7 @@ class ServiceControllerTest extends TestCase
     /**
      * @return TestResponse<\Illuminate\Http\Response>
      */
-    private function makeRequest(string $route, Service $service = null): TestResponse
+    private function makeRequest(string $route, ?Service $service = null): TestResponse
     {
         return match ($route) {
             'services.store' => $this->post(route($route), []),
