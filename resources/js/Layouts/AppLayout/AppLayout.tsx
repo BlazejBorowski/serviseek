@@ -1,18 +1,15 @@
-import { PropsWithChildren, ReactNode } from "react";
 import Navbar from "@/Components/Organisms/Navbar";
 import Header from "@/Components/Organisms/Header";
+import { AppLayoutProps } from "./types";
 
-export default function AppLayout({
-    header,
-    children,
-}: PropsWithChildren<{ header?: ReactNode }>) {
+export default function AppLayout(props: AppLayoutProps) {
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <Navbar />
 
-            <Header header={header} />
+            <Header header={props.header} />
 
-            <main>{children}</main>
+            <main>{props.children}</main>
         </div>
     );
 }

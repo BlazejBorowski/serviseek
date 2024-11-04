@@ -11,6 +11,7 @@ use Modules\Services\Database\Factories\ServiceEmailFactory;
 
 /**
  * @property int $id
+ * @property int $service_id
  * @property string $email
  * @property string $description
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -29,6 +30,11 @@ class ServiceEmail extends Model
     protected $fillable = [
         'email',
         'description',
+        'is_main',
+    ];
+
+    protected $casts = [
+        'is_main' => 'boolean',
     ];
 
     /**

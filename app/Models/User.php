@@ -9,12 +9,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Pennant\Concerns\HasFeatures;
+use Laravel\Sanctum\HasApiTokens;
 use Modules\Services\Models\Service;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, HasFeatures, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -58,5 +60,13 @@ class User extends Authenticatable
         return $this->belongsToMany(Service::class)
             ->withPivot('role')
             ->withTimestamps();
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        $superAdminEmail = 'admin@example.com';
+        $superAdminId = 1;
+
+        return $this->email === $superAdminEmail && $this->id === $superAdminId;
     }
 }

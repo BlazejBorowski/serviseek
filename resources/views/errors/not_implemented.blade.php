@@ -10,9 +10,8 @@
 <body>
     <div class="container">
         <h1>Feature Not Implemented</h1>
-        <p>We apologize, but the feature you are trying to use has not been implemented yet.</p>
         @if (!empty($message))
-            <p>Error message: {{ $message }}</p>
+            <p>{{ $message }}</p>
         @endif
         <a href="{{ url('/') }}">Return to Home Page</a>
     </div>

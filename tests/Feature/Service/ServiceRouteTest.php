@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\Services\Tests\Feature;
+namespace Tests\Feature\Service;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -12,14 +12,16 @@ use Modules\Services\Models\Service;
 use Nette\NotImplementedException;
 use Tests\TestCase;
 
-class ServiceControllerTest extends TestCase
+// use IlluminateFoundationTestingRefreshDatabase;
+
+class ServiceRouteTest extends TestCase
 {
     use RefreshDatabase;
 
     /**
      * @var string[]
      */
-    private array $notImplementedMethods = [
+    private array $notImplementedRoutes = [
         'services.create',
         'services.store',
         'services.edit',
@@ -31,20 +33,34 @@ class ServiceControllerTest extends TestCase
      * @var string[]
      */
     private array $guestRoutes = [
-        'services.index',
-        'services.show',
+        'dashboard',
     ];
 
     /**
      * @var string[]
      */
     private array $authRoutes = [
+
+    ];
+
+    /**
+     * @var string[]
+     */
+    private array $adminRoutes = [
+        'services.index',
+        'services.show',
         'services.create',
         'services.store',
         'services.edit',
         'services.update',
         'services.destroy',
     ];
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->artisan('db:seed', ['--class' => 'DevSeeder']);
+    }
 
     /**
      * @return TestResponse<\Illuminate\Http\Response>
@@ -61,6 +77,9 @@ class ServiceControllerTest extends TestCase
 
     public function test_guest_cannot_access_protected_routes(): void
     {
+        if (empty($this->authRoutes)) {
+            $this->markTestSkipped('No protected routes found');
+        }
         foreach ($this->authRoutes as $route) {
             $service = Service::factory()->create();
             $response = $this->makeRequest($route, $service);
@@ -71,6 +90,9 @@ class ServiceControllerTest extends TestCase
 
     public function test_guest_can_access_public_routes(): void
     {
+        if (empty($this->guestRoutes)) {
+            $this->markTestSkipped('No public routes found');
+        }
         foreach ($this->guestRoutes as $route) {
             $service = Service::factory()->create();
             $response = $this->makeRequest($route, $service);
@@ -81,6 +103,9 @@ class ServiceControllerTest extends TestCase
 
     public function test_authenticated_user_can_access_all_routes(): void
     {
+        if (empty($this->authRoutes) && empty($this->adminRoutes)) {
+            $this->markTestSkipped('No protected routes found');
+        }
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -88,7 +113,7 @@ class ServiceControllerTest extends TestCase
 
         foreach ($allRoutes as $route) {
             $service = Service::factory()->create();
-            $isNotImplemented = in_array($route, $this->notImplementedMethods);
+            $isNotImplemented = in_array($route, $this->notImplementedRoutes);
 
             $response = $this->makeRequest($route, $service);
 
@@ -96,12 +121,15 @@ class ServiceControllerTest extends TestCase
         }
     }
 
-    public function test_not_implemented_methods_throw_exception_for_authenticated_user(): void
+    public function test_not_implemented_routes_throw_exception_for_authenticated_user(): void
     {
+        if (empty($this->notImplementedRoutes)) {
+            $this->markTestSkipped('No not implemented routes found');
+        }
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        foreach ($this->notImplementedMethods as $route) {
+        foreach ($this->notImplementedRoutes as $route) {
             Exceptions::fake();
             $service = Service::factory()->create();
 

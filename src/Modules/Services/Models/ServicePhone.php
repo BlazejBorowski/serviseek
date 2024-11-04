@@ -11,6 +11,7 @@ use Modules\Services\Database\Factories\ServicePhoneFactory;
 
 /**
  * @property int $id
+ * @property int $service_id
  * @property string $number
  * @property string $description
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -29,6 +30,11 @@ class ServicePhone extends Model
     protected $fillable = [
         'number',
         'description',
+        'is_main',
+    ];
+
+    protected $casts = [
+        'is_main' => 'boolean',
     ];
 
     /**

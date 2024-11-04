@@ -7,6 +7,8 @@ use Tests\TestCase;
 
 class StrictTest extends TestCase
 {
+    private array $directories;
+
     protected function setUp(): void
     {
         parent::setUp();

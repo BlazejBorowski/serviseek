@@ -7,6 +7,7 @@ namespace Modules\Services\Models;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,12 +15,12 @@ use Laravel\Scout\Searchable;
 use Modules\Services\Database\Factories\ServiceFactory;
 
 /**
- * @property int $id
+ * @phpstan-import-type ServiceData from \Modules\Services\ValueObjects\Service
+ *
+ * @method ServiceData toArray()
+ *
  * @property string $name
  * @property string $description
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
  */
 class Service extends Model
 {
@@ -76,5 +77,29 @@ class Service extends Model
         return $this->belongsToMany(User::class)
             ->withPivot('role')
             ->withTimestamps();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Modules\Services\Models\ServiceCategory, $this>
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(ServiceCategory::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\Services\Models\ServiceImage, $this>
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(ServiceImage::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\Modules\Services\Models\ServiceTag, $this>
+     */
+    public function tags(): HasMany
+    {
+        return $this->hasMany(ServiceTag::class);
     }
 }

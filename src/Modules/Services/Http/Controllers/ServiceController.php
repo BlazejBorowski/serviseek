@@ -19,8 +19,10 @@ class ServiceController extends Controller
      */
     public function index(): Response
     {
+        $services = Service::paginate(20);
+
         return Inertia::render('Services/List', [
-            'services' => Service::paginate(20),
+            'services' => $services,
         ]);
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use DB;
+use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Vite;
@@ -30,14 +31,17 @@ class AppServiceProvider extends ServiceProvider
 
         DB::prohibitDestructiveCommands($this->app->isProduction());
 
-        Model::preventLazyLoading(! $this->app->isProduction());
+        Model::shouldBeStrict(! $this->app->isProduction());
 
-        // Model::unguard(!$this->app->isProduction());
+        if (! $this->app->isProduction()) {
+            // DB::listen(function (QueryExecuted $event) {
 
-        DB::listen(function (QueryExecuted $event) {
-            if ($event->time > 200) {
+            // });
+
+            DB::whenQueryingForLongerThan(200, function (Connection $connection, QueryExecuted $event) {
                 Log::info('Long running query ('.$event->time.'ms): '.$event->sql);
-            }
-        });
+            });
+        }
+
     }
 }

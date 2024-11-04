@@ -18,9 +18,12 @@
         "laravel/scout": "^10.11",
         "laravel/tinker": "^2.9",
         "matchish/laravel-scout-elasticsearch": "^7.8",
-        "tightenco/ziggy": "^2.0"
+        "tightenco/ziggy": "^2.0",
+        "blazejborowski/laravel-cqrs": "dev-main",
+        "blazejborowski/laravel-value-objects": "dev-main"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.14",
         "larastan/larastan": "^2.0",
         "laravel/breeze": "^2.2",
         "laravel/pint": "^1.18",
@@ -28,6 +31,22 @@
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.1",
         "phpunit/phpunit": "^11.0.1"
+    },
+    "repositories": {
+        "blazejborowski/laravel-cqrs": {
+            "type": "path",
+            "url": "packages/blazejborowski/laravel-cqrs",
+            "options": {
+                "symlink": true
+            }
+        },
+        "blazejborowski/laravel-value-objects": {
+            "type": "path",
+            "url": "packages/blazejborowski/laravel-value-objects",
+            "options": {
+                "symlink": true
+            }
+        }
     },
     "autoload": {
         "psr-4": {
@@ -64,6 +83,8 @@
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run dev\" --names=server,queue,logs,vite"
         ],
         "phpstan": "php vendor/bin/phpstan analyse --memory-limit=2G",
+        "phpstan:watch": "npx nodemon --watch app --watch src --exec \"php vendor/bin/phpstan analyse app src --memory-limit=2G\" -e php",
+        "test": "php artisan test",
         "pint": "php vendor/bin/pint",
         "pint-test": "php vendor/bin/pint --test",
         "phpunit": "php vendor/bin/phpunit --testdox",

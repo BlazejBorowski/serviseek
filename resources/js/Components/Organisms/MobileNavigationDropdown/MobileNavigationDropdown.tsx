@@ -2,24 +2,11 @@ import { Link, usePage } from "@inertiajs/react";
 import { MobileNavigationDropdownProps } from "./types";
 import ResponsiveNavLink from "@/Components/Atoms/ResponsiveNavLink";
 import ApplicationLogo from "@/Components/Atoms/ApplicationLogo";
-import { useEffect } from "react";
 
 export default function MobileNavigationDropdown(
     props: MobileNavigationDropdownProps
 ) {
     const user = usePage().props.auth?.user;
-
-    useEffect(() => {
-        if (props.showingNavigationDropdown) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "auto";
-        }
-
-        return () => {
-            document.body.style.overflow = "auto";
-        };
-    }, [props.showingNavigationDropdown]);
 
     return (
         <div

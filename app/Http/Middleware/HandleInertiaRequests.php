@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use Core\Features\ServiceFeature;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Laravel\Pennant\Feature;
 use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
@@ -32,6 +34,13 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $additionalData = [];
+        if ($request->is('*')) {
+            $additionalData = [
+                'servicesEnabled' => Feature::active(ServiceFeature::class),
+            ];
+        }
+
         return [
             ...parent::share($request),
             'auth' => [
@@ -41,6 +50,7 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
+            ...$additionalData,
         ];
     }
 }

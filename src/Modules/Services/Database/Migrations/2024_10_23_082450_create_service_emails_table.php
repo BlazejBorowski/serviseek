@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('service_emails', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('service_id')->constrained()->onDelete('cascade');
+            $table->foreignId('service_id')->constrained();
             $table->string('email');
-            $table->string('description');
+            $table->string('description')->nullable();
+            $table->boolean('is_main')->default(false);
             $table->timestamps();
         });
     }
