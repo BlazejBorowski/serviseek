@@ -1,5 +1,7 @@
 # ServiSeek
 
+⚠️ **Important Notice: This project is in the early stages of development.** Many features are still being planned and implemented, so expect ongoing changes and improvements.
+
 ## Version
 
 v0.0.1
