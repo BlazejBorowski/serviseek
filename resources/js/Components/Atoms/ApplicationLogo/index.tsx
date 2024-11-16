@@ -1,2 +1,1 @@
-// export { default } from "./ApplicationLogo";
-export { default } from "./ApplicationLogoImage";
+export { default } from "./ApplicationLogo";
