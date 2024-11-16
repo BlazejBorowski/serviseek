@@ -6,6 +6,8 @@
 
 v0.0.1
 
+![obraz](https://github.com/user-attachments/assets/c2c70938-c135-49c2-929d-35b7a522e2f9)
+
 ## Description
 
 ServiSeek is a web platform designed to connect clients with local service providers, freelancers, and manufacturers. It facilitates the search, booking, and review of services, providing a comprehensive platform for managing customer and service provider interactions. ServiSeek makes it easy for users to find professionals in their area, enhance engagement through interactive reviews, and build a community of trusted professionals.
