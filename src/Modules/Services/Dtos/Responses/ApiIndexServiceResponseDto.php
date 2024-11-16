@@ -22,7 +22,15 @@ class ApiIndexServiceResponseDto
     public function getData(): array
     {
         return [
-            'services' => $this->services,
+            'services' => $this->getServices(),
         ];
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection<int, Service>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
     }
 }

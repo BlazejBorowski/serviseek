@@ -13,27 +13,27 @@ use BlazejBorowski\LaravelValueObjects\ValueObjectInterface;
 final readonly class Email extends ValueObject
 {
     public function __construct(
-        private string $email
+        private string $value
     ) {}
 
-    public function getEmail(): string
+    public function getValue(): string
     {
-        return $this->email;
+        return $this->value;
     }
 
     public function getDomain(): string
     {
-        return substr(strrchr($this->email, '@'), 1);
+        return substr(strrchr($this->value, '@'), 1);
     }
 
     public function getLocalPart(): string
     {
-        return strstr($this->email, '@', true);
+        return strstr($this->value, '@', true);
     }
 
     public function obfuscate(): string
     {
-        [$localPart, $domain] = explode('@', $this->email);
+        [$localPart, $domain] = explode('@', $this->value);
 
         return substr($localPart, 0, 2).str_repeat('*', max(strlen($localPart) - 4, 0)).substr($localPart, -2).'@'.$domain;
     }
@@ -41,18 +41,18 @@ final readonly class Email extends ValueObject
     public function toArray(): array
     {
         return [
-            'email' => $this->email,
+            'value' => $this->value,
         ];
     }
 
     public function equals(ValueObjectInterface $object): bool
     {
-        return $object instanceof self && $this->email === $object->getEmail();
+        return $object instanceof self && $this->value === $object->getValue();
     }
 
     public function __toString(): string
     {
-        return $this->email;
+        return $this->value;
     }
 
     public static function fromArray(array $data): self

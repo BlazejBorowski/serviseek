@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Service;
+namespace Tests\Feature\Service\WebRoute;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Testing\TestResponse;
 use Modules\Services\Models\Service;
-use Nette\NotImplementedException;
 use Tests\TestCase;
 
 // use IlluminateFoundationTestingRefreshDatabase;
@@ -121,7 +120,7 @@ class ServiceRouteTest extends TestCase
         }
     }
 
-    public function test_not_implemented_routes_throw_exception_for_authenticated_user(): void
+    public function test_not_implemented_routes_shows_not_found_for_authenticated_user(): void
     {
         if (empty($this->notImplementedRoutes)) {
             $this->markTestSkipped('No not implemented routes found');
@@ -135,8 +134,9 @@ class ServiceRouteTest extends TestCase
 
             $response = $this->makeRequest($route, $service);
 
-            Exceptions::assertReported(NotImplementedException::class);
-            $response->assertStatus(501);
+            $response->assertStatus(404);
+
+            $response->assertSeeText('Not Found');
         }
     }
 }

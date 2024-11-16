@@ -3,7 +3,6 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Nette\NotImplementedException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,10 +17,4 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
     })
-    ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->render(function (NotImplementedException $e) {
-            return response()->view('errors.not_implemented', [
-                'message' => $e->getMessage(),
-            ], 501);
-        });
-    })->create();
+    ->withExceptions(function (Exceptions $exceptions) {})->create();

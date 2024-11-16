@@ -12,7 +12,7 @@ export default function MobileNavigationDropdown(
         <div
             className={
                 (props.showingNavigationDropdown ? "fixed" : "hidden") +
-                " sm:hidden w-screen h-screen dark:bg-gray-800 top-0"
+                " sm:hidden w-screen h-screen bg-white dark:bg-gray-800 top-0"
             }
         >
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

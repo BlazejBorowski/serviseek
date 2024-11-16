@@ -1,56 +1,55 @@
 export interface Service {
-    id: number;
-    name: string;
-    description: string;
-    category: ServiceCategory;
-    main_email: ServiceEmail;
-    emails: ServiceEmail[];
-    main_phone: ServicePhone;
-    phones: ServicePhone[];
-    tags: ServiceTag[];
-    main_image: ServiceImage;
-    images: ServiceImage[];
-    created_at: string;
-    updated_at: string;
-    deleted_at: string;
+    id?: number | null;
+    name: string | null;
+    description?: string | null;
+    category?: ServiceCategory | null;
+    main_email?: ServiceEmail | null;
+    emails?: ServiceEmail[] | null;
+    main_phone?: ServicePhone | null;
+    phones?: ServicePhone[] | null;
+    tags?: ServiceTag[] | null;
+    main_image?: ServiceImage | null;
+    images?: ServiceImage[] | null;
+    created_at?: string | null;
+    updated_at?: string | null;
+    deleted_at?: string | null;
 }
 
 export interface ServiceCategory {
-    id: number;
-    name: string;
-    created_at: string;
-    updated_at: string;
+    id?: number | null;
+    name: string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
 }
 
 export interface ServiceEmail {
-    id: number;
-    email: Email;
-    created_at: string;
-    updated_at: string;
+    id?: number | null;
+    email: Email | null;
+    created_at?: string | null;
+    updated_at?: string | null;
 }
 
 export interface Email {
-    email: string;
-    domain: string;
+    value: string | null;
+    domain?: string | null;
 }
 
 export interface ServicePhone {
-    id: number;
-    number: string;
-    created_at: string;
-    updated_at: string;
+    id?: number | null;
+    number: string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
 }
 
 export interface ServiceTag {
-    id: number;
-    name: string;
-    created_at: string;
-    updated_at: string;
+    id?: number | null;
+    name: string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
 }
 
 export interface ServiceImage {
-    id: number;
-    url: string;
-    created_at: string;
-    updated_at: string;
+    url: string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
 }

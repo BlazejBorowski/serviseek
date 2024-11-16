@@ -5,13 +5,7 @@ import ServicePresentationCard from "@/Components/Organisms/ServicePresentationC
 
 export default function Dashboard(props: DashboardProps) {
     return (
-        <AppLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Dashboard
-                </h2>
-            }
-        >
+        <AppLayout>
             <Head title="Dashboard" />
 
             <div className="py-12">

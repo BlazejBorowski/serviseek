@@ -31,9 +31,9 @@ final readonly class ServiceImage extends ValueObject implements HasMainInterfac
         return $this->url;
     }
 
-    public function isMain(): bool
+    public function isMain(): ?bool
     {
-        return $this->isMain;
+        return $this->isMain ?? null;
     }
 
     public function toArray(): array

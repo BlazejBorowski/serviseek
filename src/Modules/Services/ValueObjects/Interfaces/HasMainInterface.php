@@ -6,5 +6,5 @@ namespace Modules\Services\ValueObjects\Interfaces;
 
 interface HasMainInterface
 {
-    public function isMain(): bool;
+    public function isMain(): ?bool;
 }

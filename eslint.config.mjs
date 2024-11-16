@@ -7,6 +7,11 @@ const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 export default tseslint.config(
     {
+        rules: {
+            "no-console": "error",
+        },
+    },
+    {
         files: ["**/*.ts", "**/*.tsx"],
     },
     {

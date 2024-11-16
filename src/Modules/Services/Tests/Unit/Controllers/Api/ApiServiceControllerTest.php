@@ -68,8 +68,8 @@ class ApiServiceControllerTest extends TestCase
             parameters: [
                 'limit' => 10,
                 'offset' => 0,
-                'categories' => [],
-                'tags' => [],
+                'category' => null,
+                'tag' => null,
             ]
         );
 
@@ -99,7 +99,7 @@ class ApiServiceControllerTest extends TestCase
         $this->assertEquals('Example Category', $firstItem['category']['name']);
 
         $this->assertArrayHasKey('main_email', $firstItem);
-        $this->assertEquals('example@example.com', $firstItem['main_email']['email']['email']);
+        $this->assertEquals('example@example.com', $firstItem['main_email']['email']['value']);
         $this->assertTrue($firstItem['main_email']['is_main']);
 
         $this->assertArrayHasKey('main_phone', $firstItem);

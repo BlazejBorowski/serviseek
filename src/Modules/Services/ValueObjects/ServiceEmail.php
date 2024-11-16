@@ -13,41 +13,41 @@ use Modules\Services\ValueObjects\Interfaces\HasMainInterface;
  * @phpstan-import-type EmailData from \BlazejBorowski\LaravelValueObjects\Values\Email
  *
  * @phpstan-type ServiceEmailData array{
- *  service_id: int,
+ *  service_id: ?int,
  *  email: string,
  *  description?: string,
- *  is_main: bool
+ *  is_main: ?bool
  * }
  */
 final readonly class ServiceEmail extends ValueObject implements HasMainInterface
 {
-    private readonly int $service_id;
+    private readonly ?int $service_id;
 
     private readonly Email $email;
 
     private readonly ?string $description;
 
-    private readonly bool $is_main;
+    private readonly ?bool $is_main;
 
     /**
      * @param  ServiceEmailData  $data
      */
     public function __construct(array $data)
     {
-        $this->service_id = $data['service_id'];
+        $this->service_id = $data['service_id'] ?? null;
         $this->email = new Email($data['email']);
         $this->description = $data['description'] ?? null;
-        $this->is_main = $data['is_main'];
+        $this->is_main = $data['is_main'] ?? null;
     }
 
-    public function getServiceId(): int
+    public function getServiceId(): ?int
     {
-        return $this->service_id;
+        return $this->service_id ?? null;
     }
 
-    public function getEmail(): string
+    public function getEmailValue(): string
     {
-        return $this->email->getEmail();
+        return $this->email->getValue();
     }
 
     public function getEmailValueObject(): Email
@@ -65,9 +65,9 @@ final readonly class ServiceEmail extends ValueObject implements HasMainInterfac
         return $this->description;
     }
 
-    public function isMain(): bool
+    public function isMain(): ?bool
     {
-        return $this->is_main;
+        return $this->is_main ?? null;
     }
 
     public function toArray(): array
@@ -82,7 +82,7 @@ final readonly class ServiceEmail extends ValueObject implements HasMainInterfac
 
     public function equals(ValueObjectInterface $object): bool
     {
-        return $object instanceof self && $this->getEmail() === $object->getEmail();
+        return $object instanceof self && $this->getEmailValue() === $object->getEmailValue();
     }
 
     /**

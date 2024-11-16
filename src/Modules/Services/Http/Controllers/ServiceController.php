@@ -5,73 +5,94 @@ declare(strict_types=1);
 namespace Modules\Services\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use BlazejBorowski\LaravelCqrs\Query\QueryBus;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
+use Modules\Services\Dtos\Requests\IndexServiceRequestDto;
+use Modules\Services\Dtos\Requests\ShowServiceRequestDto;
+use Modules\Services\Dtos\Responses\IndexServiceResponseDto;
+use Modules\Services\Dtos\Responses\ShowServiceResponseDto;
+use Modules\Services\Http\Requests\IndexServiceRequest;
+use Modules\Services\Http\Requests\ShowServiceRequest;
 use Modules\Services\Http\Requests\StoreServiceRequest;
 use Modules\Services\Http\Requests\UpdateServiceRequest;
 use Modules\Services\Models\Service;
+use Modules\Services\Queries\GetServiceQuery\GetServiceQuery;
+use Modules\Services\Queries\ListServicesQuery\ListServicesQuery;
+use Modules\Services\ValueObjects\Service as ValueObjectService;
 use Nette\NotImplementedException;
 
 class ServiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): Response
-    {
-        $services = Service::paginate(20);
+    public function __construct(
+        private QueryBus $queryBus
+    ) {}
 
-        return Inertia::render('Services/List', [
-            'services' => $services,
-        ]);
+    public function index(IndexServiceRequest $request): Response
+    {
+        $requestDto = new IndexServiceRequestDto($request->getData());
+
+        /** @var Collection<int, ValueObjectService> $services */
+        $services = $this->queryBus->ask(new ListServicesQuery(
+            filterValue: $requestDto->getFilterValue(),
+            filterColumn: 'name',
+            relations: ['category', 'tags', 'mainImage', 'mainEmail', 'mainPhone'],
+            columns: ['id', 'name', 'description'],
+            limit: $requestDto->getLimit(),
+            offset: $requestDto->getOffset(),
+            category: $requestDto->getCategory(),
+            tag: $requestDto->getTag(),
+        ));
+
+        $responseDto = new IndexServiceResponseDto(
+            $services,
+        );
+
+        return Inertia::render('Services/List', $responseDto->getData());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(): never
-    {
-        throw new NotImplementedException;
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreServiceRequest $request): never
-    {
-        throw new NotImplementedException;
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Service $service): Response
-    {
-        return Inertia::render('Services/Show', [
-            'service' => $service,
-        ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Service $service): never
+    public function create(): void
     {
         throw new NotImplementedException;
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateServiceRequest $request, Service $service): never
+    public function store(StoreServiceRequest $request): void
     {
         throw new NotImplementedException;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Service $service): never
+    public function show(ShowServiceRequest $request): Response
+    {
+        $requestDto = new ShowServiceRequestDto($request->getData());
+
+        /**
+         * @var ValueObjectService
+         */
+        $service = $this->queryBus->ask(new GetServiceQuery(
+            filterValue: $requestDto->getServiceId(),
+            relations: ['images', 'emails', 'phones', 'tags'],
+            columns: ['id', 'name', 'description']
+        ));
+
+        $responseDto = new ShowServiceResponseDto(
+            $service
+        );
+
+        return Inertia::render('Services/Show', $responseDto->getData());
+    }
+
+    public function edit(Service $service): void
+    {
+        throw new NotImplementedException;
+    }
+
+    public function update(UpdateServiceRequest $request, Service $service): void
+    {
+        throw new NotImplementedException;
+    }
+
+    public function destroy(Service $service): void
     {
         throw new NotImplementedException;
     }
