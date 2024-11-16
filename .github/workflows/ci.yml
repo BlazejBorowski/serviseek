@@ -17,7 +17,7 @@ jobs:
 
       # Cache Composer dependencies to speed up installation
       - name: Cache Composer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: vendor
           key: composer-${{ hashFiles('**/composer.lock') }}
@@ -26,7 +26,7 @@ jobs:
 
       # Cache Node.js modules
       - name: Cache node modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -43,7 +43,7 @@ jobs:
 
       # Set up Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
 
