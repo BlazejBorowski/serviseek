@@ -75,11 +75,11 @@ jobs:
 
       # Run backend tests
       - name: Run backend tests
-        run: php artisan test
+        run: php artisan test --debug
 
       # Run frontend tests
-      # - name: Run frontend tests
-      #   run: npm run test
+      - name: Run frontend tests
+        run: npm run test
 
       # Run Cypress end-to-end tests
       # - name: Run Cypress tests
