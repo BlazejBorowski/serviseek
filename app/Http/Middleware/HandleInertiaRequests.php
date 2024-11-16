@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use Core\Features\ServiceFeature;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Laravel\Pennant\Feature;
+use Modules\Services\Features\ServiceWebListFeature;
 use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
@@ -37,7 +37,7 @@ class HandleInertiaRequests extends Middleware
         $additionalData = [];
         if ($request->is('*')) {
             $additionalData = [
-                'servicesEnabled' => Feature::active(ServiceFeature::class),
+                'servicesListEnabled' => Feature::active(ServiceWebListFeature::class),
             ];
         }
 

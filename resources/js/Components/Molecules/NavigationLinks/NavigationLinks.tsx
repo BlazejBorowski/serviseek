@@ -2,8 +2,8 @@ import NavLink from "@/Components/Atoms/NavLink";
 import { usePage } from "@inertiajs/react";
 
 export default function NavigationLinks() {
-    const servicesEnabled =
-        (usePage().props.servicesEnabled as boolean | undefined) ?? false;
+    const servicesListEnabled =
+        (usePage().props.servicesListEnabled as boolean | undefined) ?? false;
 
     return (
         <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -13,7 +13,7 @@ export default function NavigationLinks() {
             >
                 Dashboard
             </NavLink>
-            {servicesEnabled && (
+            {servicesListEnabled && (
                 <NavLink
                     href={route("services.index")}
                     active={route().current("services.index")}

@@ -7,7 +7,7 @@ export default function AppLayout(props: AppLayoutProps) {
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <Navbar />
 
-            <Header header={props.header} />
+            {props.header === false ? null : <Header />}
 
             <main>{props.children}</main>
         </div>

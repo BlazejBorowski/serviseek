@@ -10,11 +10,11 @@ class ApiIndexServiceRequestDto
 
     private int $offset;
 
-    /** @var array<int> */
-    private array $categories;
+    private ?int $category;
 
-    /** @var array<string> */
-    private array $tags;
+    private ?string $tag;
+
+    private ?string $filterValue;
 
     /**
      * @param  array<string, mixed>  $data
@@ -23,8 +23,9 @@ class ApiIndexServiceRequestDto
     {
         $this->limit = (int) ($data['limit'] ?? 10);
         $this->offset = (int) ($data['offset'] ?? 0);
-        $this->categories = $data['categories'] ?? [];
-        $this->tags = $data['tags'] ?? [];
+        $this->category = (int) ($data['category'] ?? null);
+        $this->tag = ($data['tag'] ?? null);
+        $this->filterValue = ($data['filterValue'] ?? null);
     }
 
     public function getLimit(): int
@@ -37,32 +38,18 @@ class ApiIndexServiceRequestDto
         return $this->offset;
     }
 
-    /**
-     * @return array<int>
-     */
-    public function getCategories(): array
+    public function getCategory(): ?int
     {
-        return $this->categories;
+        return $this->category ?? null;
     }
 
-    /**
-     * @return array<string>
-     */
-    public function getTags(): array
+    public function getTag(): ?string
     {
-        return $this->tags;
+        return $this->tag ?? null;
     }
 
-    /**
-     * @return array<string, int|string|array<int>|array<string>>
-     */
-    public function getQuery(): array
+    public function getFilterValue(): ?string
     {
-        return [
-            'limit' => $this->getLimit(),
-            'offset' => $this->getOffset(),
-            'categories' => $this->getCategories(),
-            'tags' => $this->getTags(),
-        ];
+        return $this->filterValue ?? null;
     }
 }

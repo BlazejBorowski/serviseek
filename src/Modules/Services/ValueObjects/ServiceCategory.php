@@ -8,11 +8,11 @@ use BlazejBorowski\LaravelValueObjects\ValueObject;
 use BlazejBorowski\LaravelValueObjects\ValueObjectInterface;
 
 /**
- * @phpstan-type ServiceCategoryData array{id: int, name: string}
+ * @phpstan-type ServiceCategoryData array{id: ?int, name: string}
  */
 final readonly class ServiceCategory extends ValueObject
 {
-    private readonly int $id;
+    private readonly ?int $id;
 
     private readonly string $name;
 
@@ -21,13 +21,13 @@ final readonly class ServiceCategory extends ValueObject
      */
     public function __construct(array $data)
     {
-        $this->id = $data['id'];
+        $this->id = $data['id'] ?? null;
         $this->name = $data['name'];
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
-        return $this->id;
+        return $this->id ?? null;
     }
 
     public function getName(): string
@@ -38,7 +38,7 @@ final readonly class ServiceCategory extends ValueObject
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
+            'id' => $this->getId() ?? null,
             'name' => $this->name,
         ];
     }

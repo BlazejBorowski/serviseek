@@ -9,6 +9,7 @@
 
 <body>
     <div class="container">
+        <h1>Feature is inactive</h1>
         @if (!empty($message))
             <p>{{ $message }}</p>
         @endif

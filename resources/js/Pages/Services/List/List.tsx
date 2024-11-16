@@ -1,26 +1,22 @@
 import AppLayout from "@/Layouts/AppLayout";
 import { Head } from "@inertiajs/react";
 import { ServicesListProps } from "./types";
+import ServicePresentationCard from "@/Components/Organisms/ServicePresentationCard";
 
-export default function List({ services }: ServicesListProps) {
+export default function List(props: ServicesListProps) {
     return (
-        <AppLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Services
-                </h2>
-            }
-        >
+        <AppLayout>
             <Head title="Services" />
+
             <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-2xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
-                            {services.data.map((service) => (
-                                <li key={service.id}>
-                                    <strong>{service.name}:</strong>{" "}
-                                    {service.description}
-                                </li>
+                        <div className="p-6 text-gray-900 dark:text-gray-100 space-y-6">
+                            {props.services?.map((service) => (
+                                <ServicePresentationCard
+                                    service={service}
+                                    key={service.id}
+                                />
                             ))}
                         </div>
                     </div>

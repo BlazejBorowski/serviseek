@@ -30,6 +30,16 @@ class ServicesServiceProvider extends ServiceProvider
 
         $this->app->bind(ReadServiceRepository::class, ReadServiceEloquentRepository::class);
 
+        $this->bindValueObjectsValidators();
+    }
+
+    public function boot(): void
+    {
+        $this->loadMigrationsFrom(__DIR__.'/Database/Migrations');
+    }
+
+    private function bindValueObjectsValidators(): void
+    {
         $this->app->bind(Service::class, function ($app, $parameters) {
             $validator = $app->make(ServiceValidator::class);
             $validatedData = $validator->validate($parameters['data'] ?? []);
@@ -71,10 +81,5 @@ class ServicesServiceProvider extends ServiceProvider
 
             return new ServiceImage($validatedData);
         });
-    }
-
-    public function boot(): void
-    {
-        $this->loadMigrationsFrom(__DIR__.'/Database/Migrations');
     }
 }

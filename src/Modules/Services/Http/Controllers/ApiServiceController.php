@@ -11,7 +11,7 @@ use Modules\Services\Dtos\Requests\ApiIndexServiceRequestDto;
 use Modules\Services\Dtos\Responses\ApiIndexServiceResponseDto;
 use Modules\Services\Http\Requests\ApiIndexServiceRequest;
 use Modules\Services\Http\Resources\ServiceCollection;
-use Modules\Services\Queries\ServicesListQuery;
+use Modules\Services\Queries\ListServicesQuery\ListServicesQuery;
 use Modules\Services\ValueObjects\Service;
 
 class ApiServiceController extends Controller
@@ -22,14 +22,18 @@ class ApiServiceController extends Controller
 
     public function index(ApiIndexServiceRequest $request): ServiceCollection
     {
-        $requestDto = new ApiIndexServiceRequestDto($request->validated());
+        $requestDto = new ApiIndexServiceRequestDto($request->getData());
 
         /** @var Collection<int, Service> $services */
-        $services = $this->queryBus->ask(new ServicesListQuery(
-            $requestDto->getLimit(),
-            $requestDto->getOffset(),
-            $requestDto->getCategories(),
-            $requestDto->getTags()
+        $services = $this->queryBus->ask(new ListServicesQuery(
+            filterValue: $requestDto->getFilterValue(),
+            filterColumn: 'name',
+            columns: ['id', 'name', 'description'],
+            limit: $requestDto->getLimit(),
+            offset: $requestDto->getOffset(),
+            category: $requestDto->getCategory(),
+            tag: $requestDto->getTag(),
+            relations: ['category', 'tags', 'mainImage', 'mainEmail', 'mainPhone'],
         ));
 
         $responseDto = new ApiIndexServiceResponseDto($services);

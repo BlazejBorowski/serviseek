@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
 export interface AppLayoutProps {
-    header?: ReactNode;
+    header?: boolean;
     children?: ReactNode;
 }

@@ -24,6 +24,8 @@
         "src/Modules/**/*.tsx",
         "eslint.config.mjs",
         "vite.config.js",
-        "tailwind.config.js"
+        "tailwind.config.js",
+        "jest.config.ts",
+        "setupTests.ts"
     ]
 }

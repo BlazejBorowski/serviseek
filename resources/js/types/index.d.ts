@@ -14,5 +14,5 @@ export type PageProps<
         user: User;
     };
     ziggy: Config & { location: string };
-    servicesEnabled?: boolean;
+    servicesListEnabled?: boolean;
 };

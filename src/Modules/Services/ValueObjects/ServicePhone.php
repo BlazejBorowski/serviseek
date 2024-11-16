@@ -46,9 +46,9 @@ final readonly class ServicePhone extends ValueObject implements HasMainInterfac
         return $this->description;
     }
 
-    public function isMain(): bool
+    public function isMain(): ?bool
     {
-        return $this->isMain;
+        return $this->isMain ?? null;
     }
 
     public function toArray(): array
